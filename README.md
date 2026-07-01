@@ -2,7 +2,7 @@
 
 A browser-based tool for setting orientation, GPS, and timestamp metadata on
 equirectangular 360° panorama images. It generates a ready-to-run `exiftool`
-command — no server, no upload, everything stays local.
+command - no server, no upload, everything stays local.
 
 ---
 
@@ -11,7 +11,7 @@ command — no server, no upload, everything stays local.
 - A modern browser (Chrome, Safari, Firefox)
 - [`exiftool`](https://exiftool.org) installed and available in your `PATH`
 
-Open `360PanoMeta.html` directly from the filesystem — no web server needed.
+Open `360PanoMeta.html` directly from the filesystem - no web server needed.
 
 ---
 
@@ -38,8 +38,8 @@ Open `360PanoMeta.html` directly from the filesystem — no web server needed.
 
 | Control                      | XMP-GPano tag written                                                    |
 | ---------------------------- | ------------------------------------------------------------------------ |
-| Heading — viewer navigation  | *(view only — used to aim the Straighten slider; not written to EXIF)*   |
-| Straighten — PoseRollDegrees | `PoseRollDegrees` + `PosePitchDegrees` (decomposed by heading direction) |
+| Heading - viewer navigation  | *(view only - used to aim the Straighten slider; not written to EXIF)*   |
+| Straighten - PoseRollDegrees | `PoseRollDegrees` + `PosePitchDegrees` (decomposed by heading direction) |
 | Initial FOV                  | `InitialHorizontalFOVDegrees`                                            |
 
 > **Straighten tip:** Navigate to a heading where the horizon is clearly
@@ -57,7 +57,7 @@ Latitude and longitude fields are also directly editable.
 | Field                 | Description                                                                                                                                                                                             |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Detect from image** | Reads the capture time from the filename (if it matches `IMG_YYYYMMDD_HHMMSS_…`) or falls back to EXIF `DateTimeOriginal` → `CreateDate` → `ModifyDate`. Timezone is pre-filled from your system clock. |
-| Date & Time           | `datetime-local` picker — editable to the second.                                                                                                                                                       |
+| Date & Time           | `datetime-local` picker - editable to the second.                                                                                                                                                       |
 | Timezone              | UTC offset in `±HH:MM` format (e.g. `-06:00`, `+05:30`).                                                                                                                                                |
 
 When set, the command writes all standard date fields: `DateTimeOriginal`,
@@ -111,4 +111,4 @@ exiftool \
 
 ## License
 
-MIT License — Copyright © 2026 Rodrigo Polo.
+MIT License - Copyright © 2026 Rodrigo Polo.
