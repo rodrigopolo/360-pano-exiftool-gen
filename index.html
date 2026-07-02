@@ -10,6 +10,14 @@
 </head>
 <body>
 
+<!-- ═══════════════════ DRAG-TO-REPLACE OVERLAY ════════════════════════ -->
+<div id="drop-overlay" class="hidden">
+	<div class="drop-overlay-inner">
+		<div class="drop-icon">&#8659;</div>
+		<div class="drop-label">Drop to replace the current image</div>
+	</div>
+</div>
+
 <!-- ═══════════════════ UPLOAD ZONE ═══════════════════════════════════ -->
 <div id="upload-zone">
 	<div id="drop-area">
@@ -157,7 +165,15 @@
 <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/exifr@7/dist/full.umd.js"></script>
+<script src="state.js"></script>
+<script src="calc.js"></script>
 <script src="rotation.js"></script>
+<script src="map.js"></script>
+<script src="viewer.js"></script>
+<script src="datetime.js"></script>
+<script src="exif.js"></script>
+<script src="command.js"></script>
+<script src="upload.js"></script>
 <script src="main.js"></script>
 </body>
 </html>

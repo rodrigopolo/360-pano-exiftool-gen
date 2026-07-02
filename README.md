@@ -56,7 +56,7 @@ Latitude and longitude fields are also directly editable.
 
 | Field                 | Description                                                                                                                                                                                             |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Detect from image** | Reads the capture time from the filename (if it matches `IMG_YYYYMMDD_HHMMSS_…`) or falls back to EXIF `DateTimeOriginal` → `CreateDate` → `ModifyDate`. Timezone is pre-filled from your system clock. |
+| **Detect from image** | Reads the capture time from the filename (if it matches `IMG_YYYYMMDD_HHMMSS_…` or `YYYY-MM-DD HH.MM.SS IMG_###`) or falls back to EXIF `DateTimeOriginal` → `CreateDate` → `ModifyDate`. Timezone is pre-filled from your system clock. |
 | Date & Time           | `datetime-local` picker - editable to the second.                                                                                                                                                       |
 | Timezone              | UTC offset in `±HH:MM` format (e.g. `-06:00`, `+05:30`).                                                                                                                                                |
 
