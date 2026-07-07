@@ -33,12 +33,12 @@ const loadedVals = {
 	initialPitch:   0,
 	horizonPitch:   0,
 	horizonRoll:    0,
-	initialFov:     100,
+	initialFov:     120,
 };
 
 // -- Control definitions (slider-bound controls only) -----------------------
 const CONTROLS = [
-	{ id: 'initial-fov', key: 'initialFov', min: 30, max: 150, def: 100 },
+	{ id: 'initial-fov', key: 'initialFov', min: 30, max: 120, def: 120 },
 ];
 
 // -- Slider ↔ number input binding -----------------------------------------

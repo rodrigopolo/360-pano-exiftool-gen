@@ -39,11 +39,14 @@
 		const r = pose.roll * DEG, p = pose.pitch * DEG, h = pose.heading * DEG;
 		const v0 = toVector(local.heading, local.pitch);
 
-		// Ry(roll)
+		// Ry(roll) -- signed so positive roll rotates the horizon counterclockwise,
+		// per the GPano spec ("as roll increases, the horizon rotates
+		// counterclockwise"); verified against an independently-built test image
+		// with a known baked-in roll tilt.
 		const v1 = {
-			x:  v0.x * Math.cos(r) + v0.z * Math.sin(r),
+			x:  v0.x * Math.cos(r) - v0.z * Math.sin(r),
 			y:  v0.y,
-			z: -v0.x * Math.sin(r) + v0.z * Math.cos(r),
+			z:  v0.x * Math.sin(r) + v0.z * Math.cos(r),
 		};
 		// Rx(pitch)
 		const v2 = {
@@ -79,11 +82,11 @@
 			y: v2.y * Math.cos(p) + v2.z * Math.sin(p),
 			z: -v2.y * Math.sin(p) + v2.z * Math.cos(p),
 		};
-		// Ry(-roll)
+		// Ry(-roll) -- inverse of the Ry(roll) step in localToWorld above
 		const v0 = {
-			x: v1.x * Math.cos(r) - v1.z * Math.sin(r),
-			y: v1.y,
-			z: v1.x * Math.sin(r) + v1.z * Math.cos(r),
+			x:  v1.x * Math.cos(r) + v1.z * Math.sin(r),
+			y:  v1.y,
+			z: -v1.x * Math.sin(r) + v1.z * Math.cos(r),
 		};
 
 		return toAngles(v0);

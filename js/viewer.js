@@ -42,7 +42,7 @@ function setHeading(compassBearing) {
 		p.horizonRoll  = r1(baseRoll  + s * Math.cos(θ));
 		p.horizonPitch = r1(basePitch + s * Math.sin(θ));
 		if (viewer) {
-			viewer.setHorizonRoll(p.horizonRoll);
+			viewer.setHorizonRoll(-p.horizonRoll);
 			viewer.setHorizonPitch(p.horizonPitch);
 		}
 		generateCommand();
@@ -54,7 +54,7 @@ function setHeading(compassBearing) {
 		slider.value   = 0;
 		num.value      = 0;
 		if (viewer) {
-			viewer.setHorizonRoll(p.horizonRoll);
+			viewer.setHorizonRoll(-p.horizonRoll);
 			viewer.setHorizonPitch(p.horizonPitch);
 		}
 		generateCommand();
@@ -68,25 +68,31 @@ function setHeading(compassBearing) {
 }());
 
 // -- Pannellum ----------------------------------------------------------------
+// Pannellum's horizonRoll rotates opposite the GPano PoseRollDegrees
+// convention, so it's negated here; horizonPitch already matches GPano's
+// PosePitchDegrees convention directly (no negation). Verified with an
+// unambiguous marker/plain-2D-rotation test against real pixel positions,
+// independent of this app's own rotation math. Pannellum's own per-frame
+// correction handles local/world conversion once these signs are right, so
+// pitch/yaw need no pre-transform here — same direct-pass-through pattern
+// as setHeading() uses for compass heading.
 function buildViewer() {
 	if (viewer) { viewer.destroy(); viewer = null; }
 
-	const northOffset = p.poseHeading;
-	const pose  = { heading: p.poseHeading, pitch: p.horizonPitch, roll: p.horizonRoll };
-	const local = PanoRotation.worldToLocal(pose, { heading: p.initialHeading, pitch: p.initialPitch });
-	const yaw   = local.heading > 180 ? local.heading - 360 : local.heading;
+	let yaw = ((p.initialHeading - p.poseHeading) % 360 + 360) % 360;
+	if (yaw > 180) yaw -= 360;
 
 	viewer = pannellum.viewer('pannellum-container', {
 		type:         'equirectangular',
 		panorama:     imageUrl,
 		autoLoad:     true,
 		compass:      true,
-		northOffset:  northOffset,
-		pitch:        local.pitch,
+		northOffset:  p.poseHeading,
+		pitch:        p.initialPitch,
 		yaw:          yaw,
 		hfov:         p.initialFov,
 		horizonPitch: p.horizonPitch,
-		horizonRoll:  p.horizonRoll,
+		horizonRoll:  -p.horizonRoll,
 		showControls: true,
 	});
 	document.getElementById('pannellum-container').appendChild(gridEl);
@@ -100,11 +106,8 @@ function applyLiveUpdate(changedKey) {
 // -- Action buttons -----------------------------------------------------------
 document.getElementById('use-current-view').addEventListener('click', () => {
 	if (!viewer) return;
-	const local = { heading: PanoRotation.normalize360(viewer.getYaw()), pitch: viewer.getPitch() };
-	const pose  = { heading: p.poseHeading, pitch: p.horizonPitch, roll: p.horizonRoll };
-	const world = PanoRotation.localToWorld(pose, local);
-	p.initialHeading = r1(world.heading);
-	p.initialPitch   = r1(clamp(world.pitch, -90, 90));
+	p.initialHeading = r1(PanoRotation.normalize360(viewer.getYaw() + p.poseHeading));
+	p.initialPitch   = r1(clamp(viewer.getPitch(), -90, 90));
 	generateCommand();
 });
 
