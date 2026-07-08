@@ -90,7 +90,7 @@ exiftool \
   -XMP-GPano:PosePitchDegrees=0.8 \
   -XMP-GPano:PoseRollDegrees=0.4 \
   -XMP-GPano:InitialViewHeadingDegrees=0.3 \
-  -XMP-GPano:InitialViewPitchDegrees=14 \
+  -XMP-GPano:InitialViewPitchDegrees=0 \
   -XMP-GPano:InitialHorizontalFOVDegrees=100 \
   -GPSLatitude="14 33 40.3776" -GPSLatitudeRef=North \
   -GPSLongitude="90 44 5.3628" -GPSLongitudeRef=West \
@@ -108,6 +108,85 @@ exiftool \
   -overwrite_original \
   "Injected.jpg"
 ```
+
+## Google Photo Sphere XMP schema
+
+> After thoroughly reading and testing each tag, including translating them
+> into other languages and discovering serious wording errors like *"from
+> North, for **the** center **the** image"* I decided to add my own wording to
+> the [GPano
+> specs](https://developers.google.com/streetview/spherical-metadata#gpano_parameter_reference).
+> I know these parameters have not been implemented correctly in virtually any
+> 360-degree panorama viewer and I guess the issue is the lack of clarity on
+> the definitions.
+>
+> I created a mental model to make the pose tags easier to understand. It
+> becomes much clearer once you realize that the point of reference is an
+> imaginary sphere stuck to the Earth’s surface, pointing north and perfectly
+> leveled with the horizon. Imagine a small sphere (our panorama) attached to a
+> much larger sphere (the Earth). This is why the **Z-axis points up**, the
+> **X-axis points East**, and the **Y-axis points North**. It also explains why
+> the Pose tags move the center of the panorama image relative to this
+> imaginary sphere, and why the initial view moves the camera relative to the
+> imaginary sphere rather than to the panorama image itself.
+
+
+* **Virtual sphere:**  
+  A 360°×180° imaginary sphere as a placemark/vessel or frame of reference for
+  the panorma image, fixed in real-world orientation above earth's surface,
+  North = 0°, perfectly level horizon, positioned at the given
+  latitude/longitude/altitude (Z=up, X=east, Y=north), Euler angles rotate the
+  photo sphere frame into that virtual sphere or frame of reference.
+
+* **GPano:PoseHeadingDegrees:**  
+  Compass heading (in degrees) clockwise from North of the virtual sphere to
+  the center of the panorama image.  
+  **Exiftool argument:** `-XMP-GPano:PoseHeadingDegrees`  
+  **Value:** `>= 0 and < 360`  
+  **Example:** Set to `270` if the center of the image points East, because
+  from the North of the virtual sphere, the image center is `-90°`, but we
+  don't have negative numbers in this tag, so from the North clockwise, we have
+  to go to `270°` to get to the center of the panorama image.
+
+* **GPano:PosePitchDegrees**  
+  Pitch of the center of the image, measured in degrees above the virtual
+  sphere’s horizon. Positive = center is above the horizon (looking up),
+  Negative = center is below the horizon (looking down).  
+  **Exiftool argument:** `-XMP-GPano:PosePitchDegrees`  
+  **Value:** `>= -90 and <= 90`  
+  **Example:** Set to `-10` if the center of your image shows a point that is `10°` below the virtual sphere horizon.
+
+* **GPano:PoseRollDegrees**  
+  Roll of the image, measured in degrees. Level with the virtual sphere horizon
+  = 0. As the value increases, the horizon in the image rotates
+  counterclockwise.  
+  **Exiftool argument:** `-XMP-GPano:PoseRollDegrees`  
+  **Value:** `> -180 and <= 180`  
+  **Example:** If the horizon in your image is tilted 5° clockwise, set +5 to
+  level it, because positive numbers move the panorama image counterclockwise
+  in relation to the virtual sphere.
+
+* **GPano:InitialViewHeadingDegrees**  
+  Heading of the initial view (what the user sees first), in degrees clockwise
+  from virtual sphere North. Not relative to the panorama image center but
+  relative to the virtual sphere.  
+  **Exiftool argument:** `-XMP-GPano:InitialViewHeadingDegrees`  
+  **Value:** `>= 0 and < 360`
+
+* **GPano:InitialViewPitchDegrees**  
+  Pitch of the initial view, in degrees above the virtual sphere horizon. Not
+  relative to the panorama image center but relative to the virtual sphere.  
+  **Exiftool argument:** `-XMP-GPano:InitialViewPitchDegrees`
+  **Value:** `>= -90 and <= 90`
+
+* **GPano:InitialViewRollDegrees**.  
+  Roll of the initial view. Level with the virtual sphere horizon = 0. As the value increases, the horizon in the view rotates counterclockwise.
+  **Exiftool argument:** `-XMP-GPano:InitialViewRollDegrees`  
+  **Value:** `> -180 and <= 180`
+
+## To-dos
+- Add an extra option to support the broken implementation of Facebook panoramas.
+- Handle the `InitialViewPitchDegrees` tag.
 
 ## License
 
