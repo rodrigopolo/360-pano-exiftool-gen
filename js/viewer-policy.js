@@ -63,7 +63,7 @@
 	// #upload-error box's plain-sentence tone.
 	function describeAction(tag, action, targetLabel) {
 		if (action === 'STRIP') {
-			return targetLabel + ': ' + tag + ' will be omitted - ' + targetLabel +
+			return targetLabel + ': ' + tag + ' will be cleared (written empty) - ' + targetLabel +
 			       ' cannot render this tag correctly regardless of the value written.';
 		}
 		if (action === 'COMPENSATE') {

@@ -34,6 +34,7 @@ function generateCommand() {
 		const { action, value } = ViewerPolicy.resolveTagAction(tag, rawValue, targetViewer);
 		if (action === 'STRIP') {
 			if (targetLabel) warnings.push(ViewerPolicy.describeAction(tag, action, targetLabel));
+			lines.push('  -XMP-GPano:' + tag + '= \\');
 			return;
 		}
 		if (action === 'COMPENSATE' && targetLabel) {

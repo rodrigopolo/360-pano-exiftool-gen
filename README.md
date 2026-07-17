@@ -124,7 +124,8 @@ mis-render specific GPano Pose/InitialView tags. Two bug shapes were found:
   spec defines. This can be compensated by writing the negated value.
 - **Non-linear/broken** - a viewer renders the tag unpredictably (e.g. snaps
   pitch to &plusmn;90&deg; regardless of the value written). No value we
-  write can fix this, so the tag is omitted instead.
+  write can fix this, so the tag is written empty instead, clearing any
+  pre-existing value.
 
 | Tag                       | Facebook | Photo Sphere Viewer        | Spherical Viewer      |
 | ------------------------- | -------- | -------------------------- | --------------------- |
@@ -150,7 +151,10 @@ never the default behavior.
 | `InitialViewRollDegrees`     | strip    | strip                  | strip              |
 
 When a tag is stripped or compensated for the chosen target, a warning
-appears above the command explaining which tag was affected and why.
+appears above the command explaining which tag was affected and why. A
+stripped tag is still written to the command, but with an empty value
+(`-XMP-GPano:TagName=`), which tells `exiftool` to clear the tag - this
+removes any pre-existing value rather than merely leaving it untouched.
 
 > **Known upstream bug:** Photo Sphere Viewer's non-linear handling of
 > `InitialViewHeadingDegrees`/`InitialViewPitchDegrees` isn't fully
